@@ -2,7 +2,7 @@
 <project>
 	<!------------------------------APPLICATION SETTINGS---------------------------->
 	
-	<app title="Combo Card Duel" file="ComboCardDuel" main="Main" version="0.0.1" company="Deen Games" package="com.deengames.combocardduel" />
+	<app title="Combo Card Game" file="ComboCardGame" main="Main" version="0.0.1" company="Deen Games" package="com.deengames.combocardgame" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 	<!--or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"!-->
