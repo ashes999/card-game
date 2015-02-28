@@ -1,12 +1,11 @@
 package;
-
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
-import flash.Lib;
+import flixel.FlxG;
+
 /**
  * A FlxState which can be used for the actual gameplay.
  */
@@ -18,13 +17,17 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+
+		trace("Device: " + FlxG.width + "x" + FlxG.height);
+		trace("Game: " + Main.virtualWidth + "x" + Main.virtualHeight);
+
 		this.addAndShow('assets/images/background.png');
 
 		// Five of yours
 		for(n in 0...5) {
 			var card = this.addAndShow('assets/images/sample-card.png');
 			card.x = (n * card.width) + ((n+1) * 16);
-			card.y = Main.gameHeight - card.height -  16;
+			card.y = Main.virtualHeight - card.height -  16;
 		}
 	}
 
