@@ -7,6 +7,7 @@ import flixel.util.FlxMath;
 import flixel.FlxG;
 import deengames.combocardgame.Deck;
 import flixel.group.FlxSpriteGroup;
+import flixel.util.FlxColor;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -42,19 +43,35 @@ class PlayState extends FlxState
 		var inhabitant = addAndShow("assets/images/cards/" + cardName + ".png");
 		var border = addAndShow('assets/images/cards/card-border.png');
 		// TODO: text
+		var attackText = addText("A", 8, base.height - 28);
+		var defenseText = addText("D", base.width - 24, base.height - 28);
+
 		var group = new FlxSpriteGroup(0, 0);
 		group.add(base);
 		group.add(inhabitant);
 		group.add(border);
+		group.add(attackText);
+		group.add(defenseText);
+		//group.add(myText);
 		return group;
 	}
 
-	private function addAndShow(string:String)
+	private function addAndShow(string:String) : FlxSprite
 	{
 		var s:FlxSprite = new FlxSprite();
 		s.loadGraphic(string);
 		add(s);
 		return s;
+	}
+
+	private function addText(string:String, x:Float, y:Float) : FlxText
+	{
+		var text = new FlxText(x, y, 0, string);
+		text.size = 20;
+		//text.setFormat("assets/font.ttf", 20, FlxColor.WHITE, "center");
+		text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.BLACK, 1);
+		add(text);
+		return(text);
 	}
 
 	/**
