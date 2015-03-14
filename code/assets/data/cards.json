@@ -1,0 +1,23 @@
+{
+  "cards": [
+    { "name": "alligator", "attack": 3, "defense": 1 },
+    { "name": "bat", "attack": 2, "defense": 3 },
+    { "name": "bird", "attack": 1, "defense": 5 },
+    { "name": "dragon", "attack": 5, "defense": 1 },
+    { "name": "elephant", "attack": 3, "defense": 3 },
+    { "name": "fire", "attack": 3, "defense": 2 },
+    { "name": "golem", "attack": 2, "defense": 4 },
+    { "name": "metal", "attack": 1, "defense": 4 },
+    { "name": "snake", "attack": 4, "defense": 1 },
+    { "name": "super-power", "attack": 3, "defense": 3 },
+    { "name": "wolf", "attack": 4, "defense": 2 },
+    { "name": "wood", "attack": 1, "defense": 3 },
+    { "name": "princess", "attack": 8, "defense": 7 }
+  ],
+
+  "future cards": [
+    { "name": "fire golem", "attack": 0, "defense": 0, "recipe": [ "fire", "golem" ] }
+  ],
+
+  "comments": "Current methodology: tier-1 = 3-6, tier-2 = 9-18. Cards: 6, 6, 5, 4 (total points)."
+}

@@ -21,30 +21,27 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		trace("Device: " + FlxG.width + "x" + FlxG.height);
-		trace("Game: " + Main.virtualWidth + "x" + Main.virtualHeight);
-
 		this.addAndShow('assets/images/background.png');
 		var yourDeck = new Deck(7);
 
 		// Five of yours
 		for(n in 0...5) {
 			// TODO: cards are not just strings!
-			var cardName = yourDeck.dispenseCard();
-			var card = this.makeCard(cardName);
-			card.x = (n * card.width) + ((n+1) * 16);
-			card.y = Main.virtualHeight - card.height -  16;
+			var card = yourDeck.dispenseCard();
+			var cardSprites = this.makeCard(card);
+			cardSprites.x = (n * cardSprites.width) + ((n + 1) * 16);
+			cardSprites.y = Main.virtualHeight - cardSprites.height -  16;
 		}
 	}
 
-	private function makeCard(cardName:String) : FlxSpriteGroup
+	private function makeCard(card:Card) : FlxSpriteGroup
 	{
 		var base = addAndShow('assets/images/cards/card-base.png');
-		var inhabitant = addAndShow("assets/images/cards/" + cardName + ".png");
+		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
 		var border = addAndShow('assets/images/cards/card-border.png');
 		// TODO: text
-		var attackText = addText("A", 8, base.height - 28);
-		var defenseText = addText("D", base.width - 24, base.height - 28);
+		var attackText = addText(Std.string(card.attack), 8, base.height - 28);
+		var defenseText = addText(Std.string(card.defense), base.width - 24, base.height - 28);
 
 		var group = new FlxSpriteGroup(0, 0);
 		group.add(base);
