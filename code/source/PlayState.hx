@@ -22,15 +22,23 @@ class PlayState extends FlxState
 		super.create();
 
 		this.addAndShow('assets/images/background.png');
-		var yourDeck = new Deck(7);
+		var yourDeck = new Deck(10);
+		var enemyDeck = new Deck(10);
 
 		// Five of yours
 		for(n in 0...5) {
-			// TODO: cards are not just strings!
 			var card = yourDeck.dispenseCard();
 			var cardSprites = this.makeCard(card);
 			cardSprites.x = (n * cardSprites.width) + ((n + 1) * 16);
 			cardSprites.y = Main.virtualHeight - cardSprites.height -  16;
+		}
+		
+		// Five of theirs
+		for (n in 0...5) {
+			var card = enemyDeck.dispenseCard();
+			var cardSprites = this.makeCard(card);
+			cardSprites.x = (n * cardSprites.width) + ((n + 1) * 16);
+			cardSprites.y = 16;
 		}
 	}
 
@@ -49,7 +57,6 @@ class PlayState extends FlxState
 		group.add(border);
 		group.add(attackText);
 		group.add(defenseText);
-		//group.add(myText);
 		return group;
 	}
 

@@ -4,11 +4,9 @@ import deengames.utils.JsonHelper;
 
 class Deck
 {
-  // TODO: proper data-driven architecture plzkthx, including attack/defense
-  // TODO: cards are not just strings!
-  private var masterCardList:Array<Card> = [];
-
+  private static var masterCardList:Array<Card> = [];
   private static var jsonData;
+
   private var cards:Array<Card> = new Array<Card>();
 
   public function new(size:Int)
@@ -26,7 +24,7 @@ class Deck
   // TODO: cards are not just strings!
   public function dispenseCard() : Card
   {
-    var i:Int = Std.random(cards.length);
+    var i:Int = Std.random(cards.length - 1);
     var toRemove = cards[i];
     cards.remove(toRemove);
     return toRemove;
@@ -38,7 +36,7 @@ class Deck
       jsonData = haxe.Json.parse(openfl.Assets.getText('assets/data/cards.json'));
       var cards:Array<Dynamic> = jsonData.cards;
       for (c in cards) {
-        masterCardList.push(JsonHelper.copy(c, new Card()));
+        masterCardList.push(JsonHelper.copy(c, new Card()));		
       }
     }
   }
