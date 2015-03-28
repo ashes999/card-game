@@ -1,6 +1,7 @@
 package deengames.combocardgame;
 
 import deengames.utils.JsonHelper;
+import deengames.combocardgame.Card;
 
 class Deck
 {
@@ -36,22 +37,8 @@ class Deck
       jsonData = haxe.Json.parse(openfl.Assets.getText('assets/data/cards.json'));
       var cards:Array<Dynamic> = jsonData.cards;
       for (c in cards) {
-        masterCardList.push(JsonHelper.copy(c, new Card()));		
+        masterCardList.push(JsonHelper.copy(c, new Card()));
       }
     }
-  }
-}
-
-class Card
-{
-  public var name(default, default):String;
-  public var attack(default, default):Int;
-  public var defense(default, default):Int;
-
-  public function new() { }
-
-  public function toString() : String
-  {
-    return this.name + " (" + this.attack + "/" + this.defense + ")";
   }
 }

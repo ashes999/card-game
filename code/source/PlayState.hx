@@ -5,15 +5,19 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.FlxG;
-import deengames.combocardgame.Deck;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
+
+import deengames.combocardgame.Deck;
+import deengames.combocardgame.Card;
 
 /**
  * A FlxState which can be used for the actual gameplay.
  */
 class PlayState extends FlxState
 {
+	static inline var CARD_SCALE:Float = 2/3.0;
+
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
@@ -29,16 +33,8 @@ class PlayState extends FlxState
 		for(n in 0...5) {
 			var card = yourDeck.dispenseCard();
 			var cardSprites = this.makeCard(card);
-			cardSprites.x = (n * cardSprites.width) + ((n + 1) * 16);
-			cardSprites.y = Main.virtualHeight - cardSprites.height -  16;
-		}
-		
-		// Five of theirs
-		for (n in 0...5) {
-			var card = enemyDeck.dispenseCard();
-			var cardSprites = this.makeCard(card);
-			cardSprites.x = (n * cardSprites.width) + ((n + 1) * 16);
-			cardSprites.y = 16;
+			cardSprites.x = (n * cardSprites.width * CARD_SCALE) + ((n + 1) * 16);
+			cardSprites.y = Main.virtualHeight - (cardSprites.height * CARD_SCALE) -  64;
 		}
 	}
 
@@ -48,8 +44,8 @@ class PlayState extends FlxState
 		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
 		var border = addAndShow('assets/images/cards/card-border.png');
 		// TODO: text
-		var attackText = addText(Std.string(card.attack), 8, base.height - 28);
-		var defenseText = addText(Std.string(card.defense), base.width - 24, base.height - 28);
+		var attackText = addText(Std.string(card.attack), 37, base.height - 80);
+		var defenseText = addText(Std.string(card.defense), base.width - 65, base.height - 80);
 
 		var group = new FlxSpriteGroup(0, 0);
 		group.add(base);
@@ -57,6 +53,7 @@ class PlayState extends FlxState
 		group.add(border);
 		group.add(attackText);
 		group.add(defenseText);
+		group.scale.set(CARD_SCALE, CARD_SCALE);
 		return group;
 	}
 
@@ -71,7 +68,7 @@ class PlayState extends FlxState
 	private function addText(string:String, x:Float, y:Float) : FlxText
 	{
 		var text = new FlxText(x, y, 0, string);
-		text.size = 20;
+		text.size = 25;
 		//text.setFormat("assets/font.ttf", 20, FlxColor.WHITE, "center");
 		text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.BLACK, 1);
 		add(text);
