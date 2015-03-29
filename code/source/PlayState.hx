@@ -7,6 +7,7 @@ import flixel.util.FlxMath;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
+import flixel.plugin.MouseEventManager;
 
 import deengames.combocardgame.Deck;
 import deengames.combocardgame.Card;
@@ -32,20 +33,24 @@ class PlayState extends FlxState
 		// Five of yours
 		for(n in 0...5) {
 			var card = yourDeck.dispenseCard();
-			var cardSprites = this.makeCard(card);
-			cardSprites.x = (n * cardSprites.width * CARD_SCALE) + ((n + 1) * 16);
-			cardSprites.y = Main.virtualHeight - (cardSprites.height * CARD_SCALE) -  64;
+			this.makeCard(card);
+			card.sprites.x = (n * card.sprites.width * CARD_SCALE) + ((n + 1) * 16);
+			card.sprites.y = Main.virtualHeight - (card.sprites.height * CARD_SCALE) -  64;
+			MouseEventManager.add(card.sprite, clickCard);
 		}
 	}
 
-	private function makeCard(card:Card) : FlxSpriteGroup
+	private function clickCard(sprite:FlxSprite) : Void {
+		trace("Clicked on " + sprite + "!");
+	}
+
+	private function makeCard(card:Card) : Void
 	{
 		var base = addAndShow('assets/images/cards/card-base.png');
 		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
 		var border = addAndShow('assets/images/cards/card-border.png');
-		// TODO: text
-		var attackText = addText(Std.string(card.attack), 37, base.height - 80);
-		var defenseText = addText(Std.string(card.defense), base.width - 65, base.height - 80);
+		var attackText = addText(Std.string(card.attack * 10), 28, base.height - 90);
+		var defenseText = addText(Std.string(card.defense * 10), base.width - 75, base.height - 90);
 
 		var group = new FlxSpriteGroup(0, 0);
 		group.add(base);
@@ -54,7 +59,9 @@ class PlayState extends FlxState
 		group.add(attackText);
 		group.add(defenseText);
 		group.scale.set(CARD_SCALE, CARD_SCALE);
-		return group;
+
+		card.sprites = group;
+		card.sprite = base;
 	}
 
 	private function addAndShow(string:String) : FlxSprite
@@ -68,8 +75,7 @@ class PlayState extends FlxState
 	private function addText(string:String, x:Float, y:Float) : FlxText
 	{
 		var text = new FlxText(x, y, 0, string);
-		text.size = 25;
-		//text.setFormat("assets/font.ttf", 20, FlxColor.WHITE, "center");
+		text.setFormat("assets/fonts/OpenSans-Bold.ttf", 36, FlxColor.WHITE, "center");
 		text.setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.BLACK, 1);
 		add(text);
 		return(text);
