@@ -36,7 +36,9 @@ class PlayState extends FlxState
 			this.makeCard(card);
 			card.sprites.x = (n * card.sprites.width * CARD_SCALE) + ((n + 1) * 16);
 			card.sprites.y = Main.virtualHeight - (card.sprites.height * CARD_SCALE) -  64;
-			MouseEventManager.add(card.sprite, clickCard);
+			MouseEventManager.add(card.sprite, function(sprite) {
+					trace(card);
+			});
 		}
 	}
 
@@ -49,8 +51,12 @@ class PlayState extends FlxState
 		var base = addAndShow('assets/images/cards/card-base.png');
 		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
 		var border = addAndShow('assets/images/cards/card-border.png');
-		var attackText = addText(Std.string(card.attack * 10), 28, base.height - 90);
-		var defenseText = addText(Std.string(card.defense * 10), base.width - 75, base.height - 90);
+
+		// The offset is more for multiple digits compared to single digits.
+		var aOffset = card.attack <= 9 ? 10 : 0;
+		var dOffset = card.defense <= 9 ? 10: 0;
+		var attackText = addText(Std.string(card.attack), 28 + aOffset, base.height - 90);
+		var defenseText = addText(Std.string(card.defense), base.width - 75 + dOffset, base.height - 90);
 
 		var group = new FlxSpriteGroup(0, 0);
 		group.add(base);
