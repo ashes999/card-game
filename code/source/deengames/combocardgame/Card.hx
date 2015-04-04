@@ -1,5 +1,6 @@
 package deengames.combocardgame;
 
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 

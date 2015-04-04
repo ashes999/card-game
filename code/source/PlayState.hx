@@ -5,7 +5,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.FlxG;
-import flixel.group.FlxSpriteGroup;
+
 import flixel.util.FlxColor;
 import flixel.plugin.MouseEventManager;
 
@@ -18,6 +18,8 @@ import deengames.combocardgame.Card;
 class PlayState extends FlxState
 {
 	static inline var CARD_SCALE:Float = 2/3.0;
+	var firstCardPicked:Card;
+	var secondCardPicked:Card;
 
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -33,20 +35,28 @@ class PlayState extends FlxState
 		// Five of yours
 		for(n in 0...5) {
 			var card = yourDeck.dispenseCard();
-			this.makeCard(card);
+			this.makeUiForCard(card, true);
 			card.sprites.x = (n * card.sprites.width * CARD_SCALE) + ((n + 1) * 16);
-			card.sprites.y = Main.virtualHeight - (card.sprites.height * CARD_SCALE) -  64;
+			card.sprites.y = Main.virtualHeight - (card.sprites.height * CARD_SCALE) - 32;
 			MouseEventManager.add(card.sprite, function(sprite) {
-					trace(card);
+					showPicked(card);
 			});
 		}
 	}
 
-	private function clickCard(sprite:FlxSprite) : Void {
-		trace("Clicked on " + sprite + "!");
+	private function showPicked(card:Card) : Void
+	{
+		firstCardPicked = new Card();
+		firstCardPicked.name = card.name;
+		firstCardPicked.attack = card.attack;
+		firstCardPicked.defense = card.defense;
+		makeUiForCard(firstCardPicked, false);
+
+		firstCardPicked.sprites.x = 16;
+		firstCardPicked.sprites.y = 16;
 	}
 
-	private function makeCard(card:Card) : Void
+	private function makeUiForCard(card:Card, scaleDown:Bool) : Void
 	{
 		var base = addAndShow('assets/images/cards/card-base.png');
 		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
@@ -55,16 +65,23 @@ class PlayState extends FlxState
 		// The offset is more for multiple digits compared to single digits.
 		var aOffset = card.attack <= 9 ? 10 : 0;
 		var dOffset = card.defense <= 9 ? 10: 0;
-		var attackText = addText(Std.string(card.attack), 28 + aOffset, base.height - 90);
-		var defenseText = addText(Std.string(card.defense), base.width - 75 + dOffset, base.height - 90);
 
-		var group = new FlxSpriteGroup(0, 0);
+		var textY:Int = Math.round(base.height * CARD_SCALE) - 44;
+		var attackText = addText(Std.string(card.attack), -6 + aOffset, textY);
+		var defenseText = addText(Std.string(card.defense), (base.width * CARD_SCALE) - 40 + dOffset, textY);
+
+		var group = new flixel.group.FlxSpriteGroup(0, 0);
 		group.add(base);
 		group.add(inhabitant);
 		group.add(border);
 		group.add(attackText);
 		group.add(defenseText);
-		group.scale.set(CARD_SCALE, CARD_SCALE);
+
+		if (scaleDown) {
+			group.scale.set(CARD_SCALE, CARD_SCALE);
+		}
+
+		group.updateHitbox(); // For click detection
 
 		card.sprites = group;
 		card.sprite = base;
