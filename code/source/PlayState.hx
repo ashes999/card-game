@@ -27,6 +27,8 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		FlxG.debugger.visible = true;
+		FlxG.debugger.drawDebug = true;
 
 		this.addAndShow('assets/images/background.png');
 		var yourDeck = new Deck(10);
@@ -62,13 +64,19 @@ class PlayState extends FlxState
 		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
 		var border = addAndShow('assets/images/cards/card-border.png');
 
+		card.attack = 20;
+		card.defense = 10;
+		
 		// The offset is more for multiple digits compared to single digits.
 		var aOffset = card.attack <= 9 ? 10 : 0;
 		var dOffset = card.defense <= 9 ? 10: 0;
+		var scale = scaleDown == true ? CARD_SCALE : 1;
+		var textXOffset = scaleDown == false ? 12 : 6;
+		var textYOffset = scaleDown == false ? 50 : 66;
 
-		var textY:Int = Math.round(base.height * CARD_SCALE) - 44;
-		var attackText = addText(Std.string(card.attack), -6 + aOffset, textY);
-		var defenseText = addText(Std.string(card.defense), (base.width * CARD_SCALE) - 40 + dOffset, textY);
+		var textY:Int = Math.round((base.height - textYOffset) * scale);
+		var attackText = addText(Std.string(card.attack), (aOffset - 12  + textXOffset) * scale, textY);
+		var defenseText = addText(Std.string(card.defense), (base.width - 60 + textXOffset) * scale, textY);
 
 		var group = new flixel.group.FlxSpriteGroup(0, 0);
 		group.add(base);
