@@ -11,6 +11,7 @@ import flixel.plugin.MouseEventManager;
 
 import deengames.combocardgame.Deck;
 import deengames.combocardgame.Card;
+import deengames.combocardgame.CardView;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -37,28 +38,39 @@ class PlayState extends FlxState
 		// Five of yours
 		for(n in 0...5) {
 			var card = yourDeck.dispenseCard();
-			this.makeUiForCard(card, true);
-			card.sprites.x = (n * card.sprites.width * CARD_SCALE) + ((n + 1) * 16);
-			card.sprites.y = Main.virtualHeight - (card.sprites.height * CARD_SCALE) - 32;
-			MouseEventManager.add(card.sprite, function(sprite) {
+			var view = this.makeUiForCard(card, true);
+			view.sprites.x = (n * view.sprites.width * CARD_SCALE) + ((n + 1) * 16);
+			view.sprites.y = Main.virtualHeight - (view.sprites.height * CARD_SCALE) - 32;
+			addClickEvent(view.sprite, function(sprite) {
 					showPicked(card);
 			});
 		}
 	}
 
-	private function showPicked(card:Card) : Void
+	// TODO: helperify
+	private function addClickEvent(sprite:FlxSprite, callback:FlxSprite->Void) : Void
 	{
-		firstCardPicked = new Card();
-		firstCardPicked.name = card.name;
-		firstCardPicked.attack = card.attack;
-		firstCardPicked.defense = card.defense;
-		makeUiForCard(firstCardPicked, false);
-
-		firstCardPicked.sprites.x = 16;
-		firstCardPicked.sprites.y = 16;
+		MouseEventManager.add(sprite, callback);
 	}
 
-	private function makeUiForCard(card:Card, scaleDown:Bool) : Void
+	private function showPicked(card:Card) : Void
+	{
+		if (firstCardPicked == null) {
+			firstCardPicked = card;
+			var view = makeUiForCard(firstCardPicked, false);
+
+			view.sprites.x = 16;
+			view.sprites.y = 16;
+		} else if (secondCardPicked == null && card != firstCardPicked) {
+			secondCardPicked = card;
+			var view = makeUiForCard(secondCardPicked, false);
+
+			view.sprites.x = 32 + view.sprites.width;
+			view.sprites.y = 16;
+		}
+	}
+
+	private function makeUiForCard(card:Card, scaleDown:Bool) : CardView
 	{
 		var base = addAndShow('assets/images/cards/card-base.png');
 		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
@@ -66,7 +78,7 @@ class PlayState extends FlxState
 
 		card.attack = 20;
 		card.defense = 10;
-		
+
 		// The offset is more for multiple digits compared to single digits.
 		var aOffset = card.attack <= 9 ? 10 : 0;
 		var dOffset = card.defense <= 9 ? 10: 0;
@@ -91,8 +103,7 @@ class PlayState extends FlxState
 
 		group.updateHitbox(); // For click detection
 
-		card.sprites = group;
-		card.sprite = base;
+		return new CardView(group, base);
 	}
 
 	private function addAndShow(string:String) : FlxSprite
