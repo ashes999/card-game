@@ -12,6 +12,15 @@ class Card
 
   public function new() { }
 
+  public function clone() : Card
+  {
+    var copy = new Card();
+    copy.name = this.name;
+    copy.attack = this.attack;
+    copy.defense = this.defense;
+    return copy;
+  }
+
   public function toString() : String
   {
     return this.name + " (" + this.attack + "/" + this.defense + ")";

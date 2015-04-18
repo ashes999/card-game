@@ -55,19 +55,23 @@ class PlayState extends FlxState
 
 	private function showPicked(card:Card) : Void
 	{
+		var view:CardView = null;
+
 		if (firstCardPicked == null) {
 			firstCardPicked = card;
-			var view = makeUiForCard(firstCardPicked, false);
-
+			view = makeUiForCard(firstCardPicked, false);
 			view.sprites.x = 16;
 			view.sprites.y = 16;
 		} else if (secondCardPicked == null && card != firstCardPicked) {
 			secondCardPicked = card;
-			var view = makeUiForCard(secondCardPicked, false);
-
+			view = makeUiForCard(secondCardPicked, false);
 			view.sprites.x = 32 + view.sprites.width;
 			view.sprites.y = 16;
 		}
+
+		this.addClickEvent(view.sprite, function(sprite) {
+			trace("UNSELECTED");
+		});
 	}
 
 	private function makeUiForCard(card:Card, scaleDown:Bool) : CardView
@@ -75,7 +79,7 @@ class PlayState extends FlxState
 		var base = addAndShow('assets/images/cards/card-base.png');
 		var inhabitant = addAndShow("assets/images/cards/" + card.name + ".png");
 		var border = addAndShow('assets/images/cards/card-border.png');
-
+		
 		// The offset is more for multiple digits compared to single digits.
 		var aOffset = card.attack <= 9 ? 10 : 0;
 		var dOffset = card.defense <= 9 ? 10: 0;

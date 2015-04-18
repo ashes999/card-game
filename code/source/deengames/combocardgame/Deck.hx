@@ -18,7 +18,8 @@ class Deck
     while (cards.length < size)
     {
       var i:Int = Std.random(masterCardList.length);
-      cards.push(masterCardList[i]);
+      // Create copies. They're distinct cards, mate.
+      cards.push(masterCardList[i].clone());
     }
   }
 
