@@ -13,7 +13,8 @@
     { "name": "wolf", "attack": 4, "defense": 2 },
     { "name": "wood", "attack": 1, "defense": 3 },
     { "name": "princess", "attack": 8, "defense": 7 },
-	  { "name": "magic", "attack": 4, "defense": 4 }
+	  { "name": "magic", "attack": 4, "defense": 4 },
+    { "name": "dinosaur", "attack": 5, "defense": 5 }
   ],
 
   "future cards": [
