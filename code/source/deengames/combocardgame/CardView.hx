@@ -19,4 +19,9 @@ class CardView
   {
     return "View for " + this.card.name;
   }
+
+  public function destroy() {
+    this.sprite.destroy();
+    this.sprites.destroy();
+  }
 }
