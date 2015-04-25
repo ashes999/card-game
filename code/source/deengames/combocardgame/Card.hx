@@ -9,6 +9,7 @@ class Card
   public var name(default, default):String;
   public var attack(default, default):Int;
   public var defense(default, default):Int;
+  public var recipe(default, default):Array<String>; // only set on combo cards
 
   public function new() { }
 

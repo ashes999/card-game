@@ -12,6 +12,7 @@ import flixel.plugin.MouseEventManager;
 import deengames.combocardgame.Deck;
 import deengames.combocardgame.Card;
 import deengames.combocardgame.CardView;
+import deengames.combocardgame.Combinator;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -19,8 +20,14 @@ import deengames.combocardgame.CardView;
 class PlayState extends FlxState
 {
 	static inline var CARD_SCALE:Float = 2/3.0;
+
 	var firstCardPicked:Card;
 	var secondCardPicked:Card;
+
+	var comboCard:Card;
+	var comboCardView:CardView;
+
+	var combinator = new Combinator();
 
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -71,14 +78,40 @@ class PlayState extends FlxState
 			view.sprites.y = 16;
 		}
 
+		if (firstCardPicked != null && secondCardPicked != null) {
+			checkForAndShowCombo();
+		}
+
 		this.addClickEvent(view.sprite, function(sprite) {
 			if (card == firstCardPicked) {
 				firstCardPicked = null;
+				destroyComboCardView();
 			} else if (card == secondCardPicked) {
 				secondCardPicked = null;
+				destroyComboCardView();
 			}
 			view.destroy();
 		});
+	}
+
+	private function destroyComboCardView() : Void
+	{
+		comboCard = null;
+		if (comboCardView != null) {
+			comboCardView.destroy();
+		}
+	}
+
+	private function checkForAndShowCombo() : Void
+	{
+		var result = combinator.getCombo(firstCardPicked.name, secondCardPicked.name);
+		if (result.name != "no-combo") {
+			trace("v r " + result);
+			result.name = 'combo'; // For testing
+			comboCardView = makeUiForCard(result, false);
+			comboCardView.sprites.x = Main.virtualWidth - 16 - comboCardView.sprites.width;
+			comboCardView.sprites.y = 16;
+		}
 	}
 
 	private function makeUiForCard(card:Card, scaleDown:Bool) : CardView

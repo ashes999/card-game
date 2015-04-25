@@ -23,7 +23,6 @@ class Deck
     }
   }
 
-  // TODO: cards are not just strings!
   public function dispenseCard() : Card
   {
     var i:Int = Std.random(cards.length - 1);
