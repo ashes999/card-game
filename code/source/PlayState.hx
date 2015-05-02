@@ -106,8 +106,6 @@ class PlayState extends FlxState
 	{
 		var result = combinator.getCombo(firstCardPicked.name, secondCardPicked.name);
 		if (result.name != "no-combo") {
-			trace("v r " + result);
-			result.name = 'combo'; // For testing
 			comboCardView = makeUiForCard(result, false);
 			comboCardView.sprites.x = Main.virtualWidth - 16 - comboCardView.sprites.width;
 			comboCardView.sprites.y = 16;

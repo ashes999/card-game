@@ -1,6 +1,5 @@
 {
   "cards": [
-    { "name": "alligator", "attack": 3, "defense": 1 },
     { "name": "bat", "attack": 2, "defense": 3 },
     { "name": "bird", "attack": 1, "defense": 5 },
     { "name": "dragon", "attack": 5, "defense": 1 },
@@ -10,27 +9,29 @@
     { "name": "metal", "attack": 1, "defense": 4 },
     { "name": "snake", "attack": 4, "defense": 1 },
     { "name": "super-power", "attack": 3, "defense": 3 },
-    { "name": "wolf", "attack": 4, "defense": 2 },
-    { "name": "wood", "attack": 1, "defense": 3 },
+    { "name": "wood", "attack": 1, "defense": 3 }
+  ],
+
+  "obsolete": [
+    { "name": "alligator", "attack": 3, "defense": 1 },
+    { "name": "dinosaur", "attack": 5, "defense": 5 },
     { "name": "princess", "attack": 8, "defense": 7 },
-	  { "name": "magic", "attack": 4, "defense": 4 },
-    { "name": "dinosaur", "attack": 5, "defense": 5 }
+    { "name": "magic", "attack": 4, "defense": 4 },
+    { "name": "wolf", "attack": 4, "defense": 2 }
   ],
 
   "comboCards": [
-    { "name": "alligator bat", "attack": 0, "defense": 0, "recipe": [ "alligator", "bat" ] },
-    { "name": "bat bird", "attack": 0, "defense": 0, "recipe": [ "bat", "bird" ] },
-    { "name": "bird dragon", "attack": 0, "defense": 0, "recipe": [ "bird", "dragon" ] },
-    { "name": "dragon elephant", "attack": 0, "defense": 0, "recipe": [ "dragon", "elephant" ] },
-    { "name": "fire golem", "attack": 0, "defense": 0, "recipe": [ "fire", "golem" ] },
-    { "name": "metal snake", "attack": 0, "defense": 0, "recipe": [ "metal", "snake" ] },
-    { "name": "super-power wolf", "attack": 0, "defense": 0, "recipe": [ "super-power", "wolf" ] },
-    { "name": "wood princess", "attack": 0, "defense": 0, "recipe": [ "wood", "princess" ] },
-    { "name": "magic dinosaur", "attack": 0, "defense": 0, "recipe": [ "magic", "dinosaur" ] },
-
-    { "name": "double golem", "attack": 0, "defense": 0, "recipe": [ "golem", "golem" ] },
-    { "name": "double bird", "attack": 0, "defense": 0, "recipe": [ "bird", "bird" ] }
-  ],
-
-  "comments": "Current methodology: tier-1 = 3-6, tier-2 = 9-18. Cards: 6, 6, 5, 4 (total points)."
+    { "name": "fire-golem", "attack": 7, "defense": 7, "recipe": [ "fire", "golem" ] },
+    { "name": "fire-super-power", "attack": 4, "defense": 8, "recipe": [ "fire", "super-power" ] },
+    { "name": "baseball-bat", "attack": 9, "defense": 1, "recipe": [ "wood", "bat" ] },
+    { "name": "cannon", "attack": 15, "defense": 3, "recipe": [ "wood", "metal" ] },
+    { "name": "hydra", "attack": 14, "defense": 2, "recipe": [ "snake", "dragon" ] },
+    { "name": "flying-elephant", "attack": 2, "defense": 16, "recipe": [ "bird", "elephant" ] },
+    { "name": "wood-armour-dragon", "attack": 7, "defense": 9, "recipe": [ "wood", "dragon" ] },
+    { "name": "angry-flying-snake", "attack": 9, "defense": 3, "recipe": [ "bat", "snake" ] },
+    { "name": "tank", "attack": 4, "defense": 12, "recipe": [ "elephant", "mental" ] },
+    { "name": "flying-golem", "attack": 4, "defense": 10, "recipe": [ "golem", "bird" ] },
+    { "name": "bat-super-power", "attack": 6, "defense": 6, "recipe": [ "super-power", "bat" ] },
+    { "name": "metal-armour-dragon", "attack": 10, "defense": 8, "recipe": [ "dragon", "metal" ] }
+  ]
 }

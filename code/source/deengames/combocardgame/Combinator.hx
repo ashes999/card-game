@@ -15,7 +15,6 @@ class Combinator
 
   public function getCombo(c1:String, c2:String) : Card
   {
-    trace("looking for " + c1 + " and " + c2);
     for (c in masterComboCardList) {
       var missingCards = [c.recipe[0], c.recipe[1]];
       // Make sure both cards are included. Also covers cases like the recipe
