@@ -12,14 +12,6 @@
     { "name": "wood", "attack": 1, "defense": 3 }
   ],
 
-  "obsolete": [
-    { "name": "alligator", "attack": 3, "defense": 1 },
-    { "name": "dinosaur", "attack": 5, "defense": 5 },
-    { "name": "princess", "attack": 8, "defense": 7 },
-    { "name": "magic", "attack": 4, "defense": 4 },
-    { "name": "wolf", "attack": 4, "defense": 2 }
-  ],
-
   "comboCards": [
     { "name": "fire-golem", "attack": 7, "defense": 7, "recipe": [ "fire", "golem" ] },
     { "name": "fire-super-power", "attack": 4, "defense": 8, "recipe": [ "fire", "super-power" ] },
@@ -29,9 +21,23 @@
     { "name": "flying-elephant", "attack": 2, "defense": 16, "recipe": [ "bird", "elephant" ] },
     { "name": "wood-armour-dragon", "attack": 7, "defense": 9, "recipe": [ "wood", "dragon" ] },
     { "name": "angry-flying-snake", "attack": 9, "defense": 3, "recipe": [ "bat", "snake" ] },
-    { "name": "tank", "attack": 4, "defense": 12, "recipe": [ "elephant", "mental" ] },
+    { "name": "tank", "attack": 4, "defense": 12, "recipe": [ "elephant", "metal" ] },
     { "name": "flying-golem", "attack": 4, "defense": 10, "recipe": [ "golem", "bird" ] },
     { "name": "bat-super-power", "attack": 6, "defense": 6, "recipe": [ "super-power", "bat" ] },
     { "name": "metal-armour-dragon", "attack": 10, "defense": 8, "recipe": [ "dragon", "metal" ] }
-  ]
+  ],
+
+  "future": {
+    "cards": [
+      { "name": "alligator", "attack": 3, "defense": 1 },
+      { "name": "dinosaur", "attack": 5, "defense": 5 },
+      { "name": "princess", "attack": 8, "defense": 7 },
+      { "name": "magic", "attack": 4, "defense": 4 },
+      { "name": "wolf", "attack": 4, "defense": 2 }
+    ],
+    "combos": [
+      { "name": "two-headed-snake", "recipe": [ "magic", "snake"] },
+      { "name": "wooden dinosaur", "recipe": [ "wood", "dinosaur"] },
+    ]
+  }
 }
