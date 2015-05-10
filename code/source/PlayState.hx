@@ -31,6 +31,8 @@ class PlayState extends FlxState
 
 	var combinator = new Combinator();
 	var fightButton:FlxButton;
+	var yourDeck:Deck;
+	var enemyDeck:Deck;
 
 	var cardsInHand:Array<CardView> = new Array<CardView>();
 
@@ -44,13 +46,12 @@ class PlayState extends FlxState
 		FlxG.debugger.drawDebug = true;
 
 		this.addAndShow('assets/images/background.png');
-		var yourDeck = new Deck(10);
-		var enemyDeck = new Deck(10);
+		yourDeck = new Deck(10);
+		enemyDeck = new Deck(10);
 
 		// Five of yours
 		for(n in 0...5) {
-			var card = yourDeck.dispenseCard();
-			var view = makeViewForHand(card);
+			addCardToHand();
 		}
 
 		this.fightButton = new FlxButton(16 + 216 + 16 + 216 + 16, 156, 'Fight', fight);
@@ -174,20 +175,29 @@ class PlayState extends FlxState
 		this.fightButton.visible = false;
 	}
 
+	private function addCardToHand() : Void
+	{
+		var card = yourDeck.dispenseCard();
+		var view = makeViewForHand(card);
+	}
+
 	private function fight() : Void
 	{
 		this.hideFightButton();
 		if (comboCardView != null) {
 			comboCardView.destroy();
 			comboCard = null;
+
 		}
 		if (firstCardView != null) {
 			firstCardView.destroy();
 			firstPickedCard = null;
+			addCardToHand();
 		}
 		if (secondPickedCard != null) {
 			secondPickedCardView.destroy();
 			secondPickedCard = null;
+			addCardToHand();
 		}
 	}
 
