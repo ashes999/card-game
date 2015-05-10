@@ -37,7 +37,7 @@
     ],
     "combos": [
       { "name": "two-headed-snake", "recipe": [ "magic", "snake"] },
-      { "name": "wooden dinosaur", "recipe": [ "wood", "dinosaur"] },
+      { "name": "wooden dinosaur", "recipe": [ "wood", "dinosaur"] }
     ]
   }
 }

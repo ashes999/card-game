@@ -21,13 +21,16 @@ class PlayState extends FlxState
 {
 	static inline var CARD_SCALE:Float = 2/3.0;
 
+	// TODO: a card view also contains the card. This is redundant.
 	var firstCardPicked:Card;
+	var firstCardView:CardView;
 	var secondCardPicked:Card;
-
+	var secondCardView:CardView;
 	var comboCard:Card;
 	var comboCardView:CardView;
 
 	var combinator = new Combinator();
+	var fightButton:FlxButton;
 
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -52,6 +55,12 @@ class PlayState extends FlxState
 					showPicked(card);
 			});
 		}
+
+		this.fightButton = new FlxButton(16 + 216 + 16 + 216 + 16, 156, 'Fight', fight);
+		this.fightButton.loadGraphic('assets/images/button.png');
+		this.fightButton.label.setFormat('assets/fonts/OpenSans-Regular.ttf', 48, FlxColor.WHITE);
+		add(this.fightButton);
+		this.hideFightButton();
 	}
 
 	// TODO: helperify
@@ -70,27 +79,39 @@ class PlayState extends FlxState
 			view = makeUiForCard(firstCardPicked, false);
 			view.sprites.x = 16;
 			view.sprites.y = 16;
+			firstCardView = view;
 		// Only first card picked
 		} else if (secondCardPicked == null && card != firstCardPicked) {
 			secondCardPicked = card;
 			view = makeUiForCard(secondCardPicked, false);
 			view.sprites.x = 32 + view.sprites.width;
 			view.sprites.y = 16;
+			secondCardView = view;
 		}
 
 		if (firstCardPicked != null && secondCardPicked != null) {
 			checkForAndShowCombo();
 		}
 
+		showFightButton();
+
 		this.addClickEvent(view.sprite, function(sprite) {
 			if (card == firstCardPicked) {
 				firstCardPicked = null;
+				firstCardView.destroy();
 				destroyComboCardView();
 			} else if (card == secondCardPicked) {
 				secondCardPicked = null;
+				secondCardView.destroy();
 				destroyComboCardView();
 			}
 			view.destroy();
+
+			if (firstCardPicked == null && secondCardPicked == null) {
+				hideFightButton();
+			} else {
+				showFightButton();
+			}
 		});
 	}
 
@@ -99,6 +120,33 @@ class PlayState extends FlxState
 		comboCard = null;
 		if (comboCardView != null) {
 			comboCardView.destroy();
+		}
+	}
+
+	private function showFightButton() : Void
+	{
+		this.fightButton.visible = true;
+	}
+
+	private function hideFightButton() : Void
+	{
+		this.fightButton.visible = false;
+	}
+
+	private function fight() : Void
+	{
+		this.hideFightButton();
+		if (comboCardView != null) {
+			comboCardView.destroy();
+			comboCard = null;
+		}
+		if (firstCardView != null) {
+			firstCardView.destroy();
+			firstCardPicked = null;
+		}
+		if (secondCardPicked != null) {
+			secondCardView.destroy();
+			secondCardPicked = null;
 		}
 	}
 
