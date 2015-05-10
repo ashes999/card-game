@@ -22,15 +22,17 @@ class PlayState extends FlxState
 	static inline var CARD_SCALE:Float = 2/3.0;
 
 	// TODO: a card view also contains the card. This is redundant.
-	var firstCardPicked:Card;
+	var firstPickedCard:Card;
 	var firstCardView:CardView;
-	var secondCardPicked:Card;
-	var secondCardView:CardView;
+	var secondPickedCard:Card;
+	var secondPickedCardView:CardView;
 	var comboCard:Card;
 	var comboCardView:CardView;
 
 	var combinator = new Combinator();
 	var fightButton:FlxButton;
+
+	var cardsInHand:Array<CardView> = new Array<CardView>();
 
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -48,12 +50,7 @@ class PlayState extends FlxState
 		// Five of yours
 		for(n in 0...5) {
 			var card = yourDeck.dispenseCard();
-			var view = this.makeUiForCard(card, true);
-			view.sprites.x = (n * view.sprites.width * CARD_SCALE) + ((n + 1) * 16);
-			view.sprites.y = Main.virtualHeight - (view.sprites.height * CARD_SCALE) - 32;
-			addClickEvent(view.sprite, function(sprite) {
-					showPicked(card);
-			});
+			var view = makeViewForHand(card);
 		}
 
 		this.fightButton = new FlxButton(16 + 216 + 16 + 216 + 16, 156, 'Fight', fight);
@@ -61,6 +58,34 @@ class PlayState extends FlxState
 		this.fightButton.label.setFormat('assets/fonts/OpenSans-Regular.ttf', 48, FlxColor.WHITE);
 		add(this.fightButton);
 		this.hideFightButton();
+	}
+
+	private function makeViewForHand(card:Card) : CardView
+	{
+		var view = this.makeUiForCard(card, true);
+
+		// Find first blank in hand
+		var pos:Int = -1;
+		for (n in 0...5) {
+			if (cardsInHand[n] == null) {
+				pos = n;
+				break;
+			}
+		}
+		if (pos == -1) {
+			throw "Can't find empty position in deck to put card: #{card}";
+		}
+
+		cardsInHand[pos] = view;
+
+		view.index = pos;
+		view.sprites.x = (pos * view.sprites.width * CARD_SCALE) + ((pos + 1) * 16);
+		view.sprites.y = Main.virtualHeight - (view.sprites.height * CARD_SCALE) - 32;
+		addClickEvent(view.sprite, function(sprite) {
+			showPicked(card);
+		});
+
+		return view;
 	}
 
 	// TODO: helperify
@@ -74,40 +99,56 @@ class PlayState extends FlxState
 		var view:CardView = null;
 
 		// No cards picked, or only second card picked
-		if (firstCardPicked == null && (secondCardPicked == null || secondCardPicked != card)) {
-			firstCardPicked = card;
-			view = makeUiForCard(firstCardPicked, false);
+		if (firstPickedCard == null && (secondPickedCard == null || secondPickedCard != card)) {
+			firstPickedCard = card;
+			view = makeUiForCard(firstPickedCard, false);
 			view.sprites.x = 16;
 			view.sprites.y = 16;
 			firstCardView = view;
 		// Only first card picked
-		} else if (secondCardPicked == null && card != firstCardPicked) {
-			secondCardPicked = card;
-			view = makeUiForCard(secondCardPicked, false);
+		} else if (secondPickedCard == null && card != firstPickedCard) {
+			secondPickedCard = card;
+			view = makeUiForCard(secondPickedCard, false);
 			view.sprites.x = 32 + view.sprites.width;
 			view.sprites.y = 16;
-			secondCardView = view;
+			secondPickedCardView = view;
 		}
 
-		if (firstCardPicked != null && secondCardPicked != null) {
+		// Hide the card from your hand
+		var pos:Int = -1;
+		for (n in 0...5) {
+			if (cardsInHand[n] != null && cardsInHand[n].card == card) {
+				pos = n;
+				break;
+			}
+		}
+		if (pos == -1) {
+			throw "Can't find empty position in deck to remove picked card: #{card}";
+		}
+		this.cardsInHand[pos].destroy();
+		this.cardsInHand[pos] = null;
+
+		if (firstPickedCard != null && secondPickedCard != null) {
 			checkForAndShowCombo();
 		}
 
 		showFightButton();
 
 		this.addClickEvent(view.sprite, function(sprite) {
-			if (card == firstCardPicked) {
-				firstCardPicked = null;
+			if (card == firstPickedCard) {
+				firstPickedCard = null;
 				firstCardView.destroy();
 				destroyComboCardView();
-			} else if (card == secondCardPicked) {
-				secondCardPicked = null;
-				secondCardView.destroy();
+			} else if (card == secondPickedCard) {
+				secondPickedCard = null;
+				secondPickedCardView.destroy();
 				destroyComboCardView();
 			}
 			view.destroy();
 
-			if (firstCardPicked == null && secondCardPicked == null) {
+			this.makeViewForHand(card); // Put it back in your hand
+
+			if (firstPickedCard == null && secondPickedCard == null) {
 				hideFightButton();
 			} else {
 				showFightButton();
@@ -142,17 +183,17 @@ class PlayState extends FlxState
 		}
 		if (firstCardView != null) {
 			firstCardView.destroy();
-			firstCardPicked = null;
+			firstPickedCard = null;
 		}
-		if (secondCardPicked != null) {
-			secondCardView.destroy();
-			secondCardPicked = null;
+		if (secondPickedCard != null) {
+			secondPickedCardView.destroy();
+			secondPickedCard = null;
 		}
 	}
 
 	private function checkForAndShowCombo() : Void
 	{
-		var result = combinator.getCombo(firstCardPicked.name, secondCardPicked.name);
+		var result = combinator.getCombo(firstPickedCard.name, secondPickedCard.name);
 		if (result.name != "no-combo") {
 			comboCardView = makeUiForCard(result, false);
 			comboCardView.sprites.x = Main.virtualWidth - 16 - comboCardView.sprites.width;
@@ -190,7 +231,7 @@ class PlayState extends FlxState
 
 		group.updateHitbox(); // For click detection
 
-		return new CardView(group, base);
+		return new CardView(group, base, card);
 	}
 
 	private function addAndShow(string:String) : FlxSprite

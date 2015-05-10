@@ -9,10 +9,12 @@ class CardView
   public var card(default, default):Card;
   public var sprite(default, default):FlxSprite;
   public var sprites(default, default):FlxSpriteGroup;
+  public var index(default, default):Int;
 
-  public function new(group:FlxSpriteGroup, sprite:FlxSprite) {
+  public function new(group:FlxSpriteGroup, sprite:FlxSprite, card:Card) {
     this.sprites = group;
     this.sprite = sprite;
+    this.card = card;
   }
 
   public function toString() : String
