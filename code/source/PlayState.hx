@@ -97,19 +97,23 @@ class PlayState extends FlxState
 
 	private function showPicked(card:Card) : Void
 	{
+		if (firstPickedCard != null && secondPickedCard != null) {
+			return;
+		}
+
 		var view:CardView = null;
 
 		// No cards picked, or only second card picked
 		if (firstPickedCard == null && (secondPickedCard == null || secondPickedCard != card)) {
 			firstPickedCard = card;
-			view = makeUiForCard(firstPickedCard, false);
+			view = makeUiForCard(firstPickedCard, true);
 			view.sprites.x = 16;
 			view.sprites.y = 16;
 			firstCardView = view;
 		// Only first card picked
 		} else if (secondPickedCard == null && card != firstPickedCard) {
 			secondPickedCard = card;
-			view = makeUiForCard(secondPickedCard, false);
+			view = makeUiForCard(secondPickedCard, true);
 			view.sprites.x = 32 + view.sprites.width;
 			view.sprites.y = 16;
 			secondPickedCardView = view;
@@ -133,7 +137,7 @@ class PlayState extends FlxState
 			checkForAndShowCombo();
 		}
 
-		showFightButton();
+		showOrHideFightButton();
 
 		this.addClickEvent(view.sprite, function(sprite) {
 			if (card == firstPickedCard) {
@@ -149,12 +153,20 @@ class PlayState extends FlxState
 
 			this.makeViewForHand(card); // Put it back in your hand
 
-			if (firstPickedCard == null && secondPickedCard == null) {
-				hideFightButton();
-			} else {
-				showFightButton();
-			}
+			showOrHideFightButton();
 		});
+	}
+
+	private function showOrHideFightButton() : Void
+	{
+		hideFightButton();
+
+		// Single card or valid combo
+		if ((firstPickedCard != null && secondPickedCard == null) ||
+		(firstPickedCard == null && secondPickedCard != null) ||
+		(comboCard != null)) {
+			showFightButton();
+		}
 	}
 
 	private function destroyComboCardView() : Void
@@ -184,6 +196,7 @@ class PlayState extends FlxState
 	private function fight() : Void
 	{
 		this.hideFightButton();
+
 		if (comboCardView != null) {
 			comboCardView.destroy();
 			comboCard = null;
@@ -205,6 +218,7 @@ class PlayState extends FlxState
 	{
 		var result = combinator.getCombo(firstPickedCard.name, secondPickedCard.name);
 		if (result.name != "no-combo") {
+			comboCard = result;
 			comboCardView = makeUiForCard(result, false);
 			comboCardView.sprites.x = Main.virtualWidth - 16 - comboCardView.sprites.width;
 			comboCardView.sprites.y = 16;
