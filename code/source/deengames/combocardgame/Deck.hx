@@ -31,6 +31,22 @@ class Deck
     return toRemove;
   }
 
+  public function getHand() : Array<Card>
+  {
+    var toReturn : Array<Card> = [];
+    if (cards.length >= 5) {
+       toReturn = [cards[0], cards[1], cards[2], cards[3], cards[4]];
+    } else {
+      var i:Int = 0;
+      for (c in cards) {
+        toReturn[i] = c;
+        i++;
+      }
+    }
+
+    return toReturn;
+  }
+
   private function loadCardData() : Void
   {
     if (jsonData == null) {

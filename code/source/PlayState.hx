@@ -4,9 +4,12 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import flixel.util.FlxPoint;
+import flixel.util.FlxColor;
+import flixel.util.FlxVelocity;
+
 import flixel.FlxG;
 
-import flixel.util.FlxColor;
 import flixel.plugin.MouseEventManager;
 
 import deengames.combocardgame.Deck;
@@ -108,14 +111,14 @@ class PlayState extends FlxState
 		// No cards picked, or only second card picked
 		if (firstPickedCard == null && (secondPickedCard == null || secondPickedCard != card)) {
 			firstPickedCard = card;
-			view = makeUiForCard(firstPickedCard, true);
+			view = makeUiForCard(firstPickedCard, false);
 			view.sprites.x = 16;
 			view.sprites.y = 16;
 			firstCardView = view;
 		// Only first card picked
 		} else if (secondPickedCard == null && card != firstPickedCard) {
 			secondPickedCard = card;
-			view = makeUiForCard(secondPickedCard, true);
+			view = makeUiForCard(secondPickedCard, false);
 			view.sprites.x = 32 + view.sprites.width;
 			view.sprites.y = 16;
 			secondCardView = view;
@@ -201,22 +204,47 @@ class PlayState extends FlxState
 	private function fight() : Void
 	{
 		this.hideFightButton();
+		var selectedCardView = this.comboCardView != null ? this.comboCardView : this.firstCardView;
+		this.removeCardViews(selectedCardView);
+		selectedCardView.sprites.x = 16;
+		selectedCardView.sprites.y = 16;
+		//this.showOpponentCard();
+		//FlxVelocity.moveTowardsPoint(cardView.sprites, new FlxPoint(960, 16));
+		selectedCardView.sprites.velocity.set(100, 0);
+		haxe.Timer.delay(function() {
+			this.removeCardViews();
+		}, 1);
+	}
 
-		if (comboCardView != null) {
-			comboCardView.destroy();
-			comboCard = null;
-		}
+	private function showOpponentCard() : Void
+	{
+		var card = this.pickOpponentCard();
+		var view = makeUiForCard(card, false);
+	}
 
-		if (firstCardView != null) {
+	private function pickOpponentCard() : Card
+	{
+		var cards = this.enemyDeck.getHand();
+		return cards[0];
+	}
+
+	private function removeCardViews(exception:CardView = null) : Void
+	{
+		if (firstCardView != null && (exception == null || exception != firstCardView)) {
 			firstCardView.destroy();
 			firstPickedCard = null;
 			addCardToHand();
 		}
 
-		if (secondCardView != null) {
+		if (secondCardView != null && (exception == null || exception != secondCardView)) {
 			secondCardView.destroy();
 			secondPickedCard = null;
 			addCardToHand();
+		}
+
+		if (comboCardView != null && (exception == null || exception != comboCardView)) {
+			comboCardView.destroy();
+			comboCard = null;
 		}
 	}
 
