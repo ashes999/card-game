@@ -24,8 +24,10 @@ class PlayState extends FlxState
 	// TODO: a card view also contains the card. This is redundant.
 	var firstPickedCard:Card;
 	var firstCardView:CardView;
+
 	var secondPickedCard:Card;
-	var secondPickedCardView:CardView;
+	var secondCardView:CardView;
+
 	var comboCard:Card;
 	var comboCardView:CardView;
 
@@ -46,7 +48,7 @@ class PlayState extends FlxState
 		FlxG.debugger.drawDebug = true;
 
 		this.addAndShow('assets/images/background.png');
-		yourDeck = new Deck(10);
+		yourDeck = new Deck(6);
 		enemyDeck = new Deck(10);
 
 		// Five of yours
@@ -116,7 +118,7 @@ class PlayState extends FlxState
 			view = makeUiForCard(secondPickedCard, true);
 			view.sprites.x = 32 + view.sprites.width;
 			view.sprites.y = 16;
-			secondPickedCardView = view;
+			secondCardView = view;
 		}
 
 		// Hide the card from your hand
@@ -146,7 +148,7 @@ class PlayState extends FlxState
 				destroyComboCardView();
 			} else if (card == secondPickedCard) {
 				secondPickedCard = null;
-				secondPickedCardView.destroy();
+				secondCardView.destroy();
 				destroyComboCardView();
 			}
 			view.destroy();
@@ -190,7 +192,10 @@ class PlayState extends FlxState
 	private function addCardToHand() : Void
 	{
 		var card = yourDeck.dispenseCard();
-		var view = makeViewForHand(card);
+		if (card != null) {
+			// null when you run out of cards
+			var view = makeViewForHand(card);
+		}
 	}
 
 	private function fight() : Void
@@ -200,15 +205,16 @@ class PlayState extends FlxState
 		if (comboCardView != null) {
 			comboCardView.destroy();
 			comboCard = null;
-
 		}
+
 		if (firstCardView != null) {
 			firstCardView.destroy();
 			firstPickedCard = null;
 			addCardToHand();
 		}
-		if (secondPickedCard != null) {
-			secondPickedCardView.destroy();
+
+		if (secondCardView != null) {
+			secondCardView.destroy();
 			secondPickedCard = null;
 			addCardToHand();
 		}
