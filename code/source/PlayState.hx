@@ -48,8 +48,8 @@ class PlayState extends FlxState
 		FlxG.debugger.drawDebug = true;
 
 		this.addAndShow('assets/images/background.png');
-		yourDeck = new Deck(6);
-		enemyDeck = new Deck(10);
+		yourDeck = new Deck(20);
+		enemyDeck = new Deck(20);
 
 		// Five of yours
 		for(n in 0...5) {
